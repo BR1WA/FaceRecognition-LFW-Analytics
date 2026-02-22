@@ -36,7 +36,12 @@ data/processed/
 *.pth
 *.onnx
 *.h5
+*.joblib
 models/checkpoints/
+models/models_part2/
+
+# Virtual environments
+.venv/
 
 # Outputs
 outputs/
