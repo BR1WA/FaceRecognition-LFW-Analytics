@@ -20,8 +20,35 @@ class Analytics:
                 with open(path, 'r') as f:
                     data = json.load(f)
                     if isinstance(data, list):
+                        for r in data:
+                            self._normalize(r)
                         all_results.extend(data)
         return all_results
+
+    @staticmethod
+    def _normalize(r):
+        """Normalize part1 results to match part2 schema."""
+        # Part1 uses 'head' instead of 'classifier'
+        if 'classifier' not in r and 'head' in r:
+            r['classifier'] = r['head']
+        # Part1 uses 'history' instead of 'backbone_training'
+        if 'backbone_training' not in r and 'history' in r:
+            h = r['history']
+            r['backbone_training'] = {
+                'train_loss': h.get('train_loss', []),
+                'train_accuracy': h.get('train_acc', []),
+                'val_loss': h.get('val_loss', []),
+                'val_accuracy': h.get('val_acc', []),
+            }
+        # Part1 may lack classifier_metrics — synthesize from best_val_acc
+        if 'classifier_metrics' not in r:
+            val_acc = r.get('best_val_acc', 0)
+            r['classifier_metrics'] = {
+                'test_accuracy': val_acc,
+                'f1': 0,
+                'top5_accuracy': 0,
+                'auc_roc': 0,
+            }
 
     def get_training_health(self):
         """

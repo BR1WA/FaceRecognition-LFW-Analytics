@@ -11,17 +11,18 @@ app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__))
 # Configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
+MODEL_DIR_PART1 = os.path.join(PROJECT_DIR, 'models', 'models_part1')
 MODEL_DIR_PART2 = os.path.join(PROJECT_DIR, 'models', 'models_part2')
-MODEL_DIR_KAGGLE = os.path.join(PROJECT_DIR, 'models', 'kaggle models')
-RESULTS_FILE = os.path.join(PROJECT_DIR, 'models', 'part2_model_results.json')
+RESULTS_FILE_PART1 = os.path.join(PROJECT_DIR, 'models', 'part1_model_results.json')
+RESULTS_FILE_PART2 = os.path.join(PROJECT_DIR, 'models', 'part2_model_results.json')
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Initialize components
-model_manager = ModelManager([MODEL_DIR_PART2, MODEL_DIR_KAGGLE])
-analytics = Analytics([RESULTS_FILE])
+model_manager = ModelManager([MODEL_DIR_PART1, MODEL_DIR_PART2])
+analytics = Analytics([RESULTS_FILE_PART1, RESULTS_FILE_PART2])
 video_camera = VideoCamera(model_manager)
 
 # Global model state
