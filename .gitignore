@@ -38,6 +38,7 @@ data/processed/
 *.h5
 *.joblib
 models/checkpoints/
+models/models_part1/
 models/models_part2/
 
 # Virtual environments
