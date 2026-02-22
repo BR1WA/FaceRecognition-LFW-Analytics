@@ -34,19 +34,26 @@ class Analytics:
         # Part1 uses 'history' instead of 'backbone_training'
         if 'backbone_training' not in r and 'history' in r:
             h = r['history']
+            train_loss = h.get('train_loss', [])
             r['backbone_training'] = {
-                'train_loss': h.get('train_loss', []),
+                'train_loss': train_loss,
                 'train_accuracy': h.get('train_acc', []),
                 'val_loss': h.get('val_loss', []),
                 'val_accuracy': h.get('val_acc', []),
             }
-        # Part1 may lack classifier_metrics — synthesize from best_val_acc
+            if 'epochs' not in r:
+                r['epochs'] = len(train_loss)
+        # Part1 may lack classifier_metrics — synthesize from root keys
         if 'classifier_metrics' not in r:
-            val_acc = r.get('best_val_acc', 0)
+            val_acc = r.get('final_val_acc', r.get('best_val_acc', 0))
+            f1 = r.get('final_val_f1', 0)
+            top5 = r.get('final_val_top5', 0)
+            # Part 1 doesn't have AUC-ROC explicitly, default to 0
+            
             r['classifier_metrics'] = {
                 'test_accuracy': val_acc,
-                'f1': 0,
-                'top5_accuracy': 0,
+                'f1': f1,
+                'top5_accuracy': top5,
                 'auc_roc': 0,
             }
 
