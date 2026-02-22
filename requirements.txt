@@ -1,0 +1,36 @@
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Computer Vision
+opencv-python>=4.8.0
+Pillow>=10.0.0
+albumentations>=1.3.0
+
+# Face detection
+ultralytics>=8.0.0
+facenet-pytorch>=2.5.0
+
+# Deep learning utilities
+timm>=0.9.0
+
+# Data handling
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+tqdm>=4.65.0
+
+# Configuration
+pyyaml>=6.0
+
+# Jupyter
+jupyter>=1.0.0
+
+# Web App
+flask>=3.0.0
+psutil>=5.9.0
+joblib>=1.3.0
+scikit-learn>=1.3.0
