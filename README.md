@@ -47,8 +47,8 @@ The integrated dashboard provides deep-dive analytics for all 90 models, allowin
 - **Modern UI**: A premium, dark-mode interface built with glassmorphism and real-time Chart.js integration.
 
 ## 👥 Authors
+- ZOUITNI Salah Eddine
 - CHERGUI Yassir
-- ZOUITNI Salaheddine
 
 ## 🛠️ How to Run
 
