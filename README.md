@@ -1,5 +1,11 @@
 # Face Recognition with LFW
 
+![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-2.0+-lightgrey?logo=flask&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-EE4C2C?logo=pytorch&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.0+-F7931E?logo=scikit-learn&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-yellowgreen?logo=opencv&logoColor=white)
+
 A deep learning project for face detection and recognition using PyTorch.
 
 ## Features
