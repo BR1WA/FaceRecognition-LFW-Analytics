@@ -3,7 +3,7 @@
 A deep learning project for face detection and recognition using PyTorch.
 
 ## Features
-- Face detection using YOLOv8
+- Face detection using OpenCV Haar Cascades
 - Face recognition (identify people by name)
 - Trained on LFW (Labeled Faces in the Wild) dataset
 - Video inference pipeline
