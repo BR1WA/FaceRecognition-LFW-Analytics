@@ -35,11 +35,13 @@
                 <div class="video-overlay">
                     <div class="flex items-center gap-4">
                         <div class="text-xs text-gray-400">
-                            <span class="text-white font-semibold" id="modelDisplay">No Model</span>
+                            <span class="text-white font-semibold" id="modelDisplay">convnext_tiny + cosface</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span id="detectionCount" class="text-xs bg-black/50 px-2 py-1 rounded">Faces: 0</span>
+                        <span id="detectionCount"
+                            class="text-xs bg-cyan/20 text-cyan px-2 py-1 rounded border border-cyan/30">Playing:
+                            test2.mp4</span>
                     </div>
                 </div>
             </div>
@@ -100,7 +102,7 @@
                     <input type="file" id="video-upload" accept="video/*" class="hidden">
                     <button id="upload-btn" class="btn-primary w-full flex items-center justify-center gap-2">
                         <i data-lucide="play" class="w-4 h-4"></i>
-                        <span id="upload-text">Upload & Play</span>
+                        <span id="upload-text">Playing: test2.mp4</span>
                     </button>
 
                     <!-- Replay Button (shown when video ends) -->
@@ -335,34 +337,52 @@
                 const res = await fetch('/api/models');
                 if (res.ok) {
                     availableModels = await res.json();
+
                     // Populate backbone dropdown
-                    backboneSelect.innerHTML = '<option value="" disabled selected>Select Backbone</option>';
+                    backboneSelect.innerHTML = '<option value="" disabled>Select Backbone</option>';
                     availableModels.backbones.forEach(bb => {
                         const opt = document.createElement('option');
                         opt.value = bb;
                         opt.textContent = bb;
+                        if (bb === 'convnext_tiny') { opt.selected = true; }
                         backboneSelect.appendChild(opt);
                     });
+
+                    // Trigger classifier population for defaults
+                    if (backboneSelect.value) {
+                        populateClassifiers(backboneSelect.value, 'cosface');
+                    }
+
+                    // Update header display to match backend default
+                    document.getElementById('current-backbone').textContent = 'convnext_tiny';
+                    document.getElementById('current-classifier').textContent = 'cosface';
+                    document.getElementById('modelDisplay').textContent = 'convnext_tiny + cosface';
                 }
             } catch (e) {
                 console.error('Failed to load models:', e);
             }
         }
 
-        // When backbone changes, populate classifiers
-        backboneSelect.addEventListener('change', () => {
-            const backbone = backboneSelect.value;
+        function populateClassifiers(backbone, defaultSelect = null) {
             classifierSelect.disabled = false;
-            classifierSelect.innerHTML = '<option value="" disabled selected>Select Classifier</option>';
+            classifierSelect.innerHTML = '<option value="" disabled ' + (!defaultSelect ? 'selected' : '') + '>Select Classifier</option>';
             if (availableModels.classifiers && availableModels.classifiers[backbone]) {
                 availableModels.classifiers[backbone].forEach(cl => {
                     const opt = document.createElement('option');
                     opt.value = cl;
                     opt.textContent = cl;
+                    if (cl === defaultSelect) { opt.selected = true; }
                     classifierSelect.appendChild(opt);
                 });
             }
+        }
+
+        // When backbone changes, repopulate classifiers
+        backboneSelect.addEventListener('change', () => {
+            populateClassifiers(backboneSelect.value);
         });
+
+        loadModels();
 
         // Apply model configuration
         modelForm.addEventListener('submit', async (e) => {

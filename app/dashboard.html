@@ -370,13 +370,14 @@
                 const option = document.createElement('option');
                 option.value = bb;
                 option.textContent = bb;
+                if (bb === 'convnext_tiny') { option.selected = true; }
                 backboneSelect.appendChild(option);
             });
 
             // When backbone changes, populate classifiers
             backboneSelect.addEventListener('change', () => {
                 const bb = backboneSelect.value;
-                classifierSelect.innerHTML = '<option value="" disabled selected>Select Classifier</option>';
+                classifierSelect.innerHTML = '<option value="" disabled>Select Classifier</option>';
                 classifierSelect.disabled = false;
 
                 const classifiers = [...backboneMap[bb]].sort();
@@ -384,11 +385,15 @@
                     const option = document.createElement('option');
                     option.value = cl;
                     option.textContent = cl;
+                    if (cl === 'cosface') { option.selected = true; }
                     classifierSelect.appendChild(option);
                 });
 
-                // Auto-select first classifier
-                if (classifiers.length > 0) {
+                // Auto-select preferred classifier or first
+                if (classifiers.includes('cosface')) {
+                    classifierSelect.value = 'cosface';
+                    showTrainingForSelection(bb, 'cosface');
+                } else if (classifiers.length > 0) {
                     classifierSelect.value = classifiers[0];
                     showTrainingForSelection(bb, classifiers[0]);
                 }
@@ -405,11 +410,16 @@
                 if (selectedModel) renderTrainingCharts(selectedModel);
             }
 
-            // Auto-select first backbone on load
-            const firstBB = Object.keys(backboneMap).sort()[0];
-            if (firstBB) {
-                backboneSelect.value = firstBB;
+            // Trigger initial chart load
+            if (backboneSelect.value) {
                 backboneSelect.dispatchEvent(new Event('change'));
+            } else {
+                // Fallback to auto-select first backbone on load
+                const firstBB = Object.keys(backboneMap).sort()[0];
+                if (firstBB) {
+                    backboneSelect.value = firstBB;
+                    backboneSelect.dispatchEvent(new Event('change'));
+                }
             }
         }
 
@@ -555,6 +565,7 @@
 
         // ═══════ NEW ANALYSIS RENDERING ═══════
         function renderNewAnalysis(data) {
+            if (!data.neural_vs_classical) return; // Prevent crashes if advanced analytics are missing
             const chartColors = {
                 orange: 'rgba(249, 115, 22, 0.8)',
                 blue: 'rgba(59, 130, 246, 0.8)',
@@ -892,6 +903,7 @@
                     const f1 = row.classifier_metrics?.f1 || 0;
                     const top5 = row.classifier_metrics?.top5_accuracy || 0;
                     const auc = row.classifier_metrics?.auc_roc || 0;
+                    const time = row.training_time_seconds || 0;
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -902,7 +914,7 @@
                     <td class="text-teal-400 font-mono">${top5.toFixed(2)}%</td>
                     <td class="text-purple font-mono">${(f1 * 100).toFixed(2)}%</td>
                     <td class="text-amber font-mono">${auc.toFixed(4)}</td>
-                    <td class="font-mono">${row.training_time_seconds.toFixed(1)}</td>
+                    <td class="font-mono">${time.toFixed(1)}</td>
                 `;
                     tbody.appendChild(tr);
                 });
