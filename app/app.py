@@ -27,9 +27,13 @@ video_camera = VideoCamera(model_manager)
 
 # Global model state
 current_model_config = {
-    'backbone': None,
-    'classifier': None
+    'backbone': 'convnext_tiny',
+    'classifier': 'cosface'
 }
+
+# Set default model and video on startup
+video_camera.set_model(current_model_config['backbone'], current_model_config['classifier'])
+video_camera.set_video_source(os.path.join(PROJECT_DIR, 'test2.mp4'))
 
 @app.route('/')
 def index():
