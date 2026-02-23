@@ -8,6 +8,16 @@ A deep learning project for face detection and recognition using PyTorch.
 - Trained on LFW (Labeled Faces in the Wild) dataset
 - Video inference pipeline
 
+## Application Screens
+
+### Live Recognition & Model Switching
+![Live Recognition UI](assets/live_recognition.png)
+
+### Analytics Dashboard
+![Dashboard Part 1](assets/dashboard_part1.png)
+![Dashboard Part 2](assets/dashboard_part2.png)
+![Dashboard Part 3](assets/dashboard_part3.png)
+
 ## Project Structure
 ```
 ├── app/                    # Inference pipeline
